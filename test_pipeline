@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Git') {
+            steps {
+                git 'https://github.com/n3yron/site.git'
+            }
+        }
+        stage('Sh') {
+            steps {
+                sh label: '', script: 'echo "hello world"'
+            }
+        }
+    }
+}
