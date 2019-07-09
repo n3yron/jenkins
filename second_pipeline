@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git') {
+            steps {
+                git 'https://github.com/n3yron/site.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                retry(3) {
+                sh 'echo "zazaza"'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+        stage('Sh') {
+            steps {
+                sh label: '', script: 'ls -lah /var/jenkins_home/workspace/pipeline'
+                sh '''echo "lol"
+                echo "lalala"
+                ls
+                '''
+            }
+        }
+        stage ('mail') {
+            steps {
+                mail bcc: '', body: 'got mail', cc: '', from: '', replyTo: '', subject: '123', to: 'n3yron@gmail.com'
+            }
+        }
+    }
+}
