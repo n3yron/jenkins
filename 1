@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    
+    environment {
+        NAME='Alexandr'
+        SECOND_NAME='Dovnich'
+        SECRET=credentials('SECRET_TEXT')
+    }
+
+    stages {
+        stage('my name') {
+            steps {
+            sh 'echo "$NAME $SECOND_NAME"'
+            sh 'echo "$SECRET"'
+            }
+        }
+        stage('Git') {
+            steps {
+                git 'https://github.com/n3yron/site.git'
+            }
+        }
+        stage('Build and timeout') {
+            steps {
+                timeout(time: 7, unit: 'SECONDS') {
+                    sh 'sleep 5'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                retry(3) {
+                sh 'echo "zazaza"'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+        stage('Sh') {
+            steps {
+                sh label: '', script: 'ls -lah /var/jenkins_home/workspace/pipeline'
+                sh '''echo "lol"
+                echo "lalala"
+                ls
+                '''
+            }
+        }
+    }
+    post {
+        always {
+            echo 'work is done'
+        }
+        success {
+            echo 'success'
+        }
+        failure {
+            mail bcc: '', body: 'fail', cc: '', from: '', replyTo: '', subject: '123', to: 'n3yron@gmail.com'
+        }
+    }
+}
