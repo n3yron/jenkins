@@ -1,0 +1,29 @@
+pipeline {
+    agent none
+    stages {
+	      stage('Build') {
+            agent any
+            steps {
+		            sh 'ls -la'
+            }
+        }
+        stage('lol') {
+            agent any
+            steps {
+                sh 'echo "lalala"'
+            }
+        }
+        stage('proverka') {
+            agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
+            steps {
+                sh 'echo "111"'
+            }
+        }
+    }
+}
+// После агента { должно быть. Докер обернуть в agent {} короче. Дальше уже опции для докера тоже обернуты в новый слой скобок.
